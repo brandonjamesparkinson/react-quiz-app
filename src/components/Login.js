@@ -7,8 +7,12 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
+import { createAPIEndpoint } from "../api";
 import useForm from "../hooks/useForm";
 import Center from "./Center";
+import { ENDPOINTS } from "../api";
+import useStateContext from "../hooks/useStateContext";
+import { useNavigate } from "react-router-dom";
 
 const getFreshModel = () => ({
   name: "",
@@ -16,12 +20,22 @@ const getFreshModel = () => ({
 });
 
 export default function Login() {
+  const { context, setContext } = useStateContext();
+  const navigate = useNavigate();
+
   const { values, setValues, errors, setErrors, handleInputChange } =
     useForm(getFreshModel);
 
   const login = (e) => {
     e.preventDefault();
-    if (validate()) console.log(values);
+    if (validate())
+      createAPIEndpoint(ENDPOINTS.participant)
+        .post(values)
+        .then((res) => {
+          setContext({ participantId: res.data.participantId });
+          navigate("/quiz");
+        })
+        .catch((err) => console.log(err));
   };
 
   const validate = () => {
@@ -34,6 +48,7 @@ export default function Login() {
 
   return (
     <Center>
+      {context.participantId}
       <Card sx={{ width: 400 }}>
         <CardContent sx={{ textAlign: "center" }}>
           <Typography variant="h3" sx={{ my: 3 }}>
