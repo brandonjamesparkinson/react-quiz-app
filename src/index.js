@@ -11,6 +11,9 @@ const darkTheme = createTheme({
   palette: {
     mode: "dark",
   },
+  typography: {
+    fomtFamily: "IBM Plex Sans",
+  },
 });
 
 ReactDOM.render(

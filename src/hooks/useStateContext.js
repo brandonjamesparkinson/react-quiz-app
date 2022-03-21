@@ -1,3 +1,4 @@
+import { linearProgressClasses } from "@mui/material";
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 export const stateContext = createContext();
@@ -21,6 +22,10 @@ export default function useStateContext() {
     context,
     setContext: (obj) => {
       setContext({ ...context, ...obj });
+    },
+    resetContext: () => {
+      localStorage.removeItem("context");
+      setContext(getFreshContext());
     },
   };
 }
